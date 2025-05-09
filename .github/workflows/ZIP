@@ -1,0 +1,91 @@
+import zipfile
+import os
+
+# Define the file structure for the Hcoinx Drive game
+game_files = {
+    "index.html": """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hcoinx Drive</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <h1>Welcome to Hcoinx Drive</h1>
+    <div class="customization">
+        <label for="carModel">Car Model:</label>
+        <select id="carModel">
+            <option value="Speedster">Speedster</option>
+            <option value="Cruiser">Cruiser</option>
+        </select>
+
+        <label for="carColor">Car Color:</label>
+        <input type="color" id="carColor" value="#ff0000" />
+
+        <label for="carUpgrade">Upgrade:</label>
+        <select id="carUpgrade">
+            <option value="turbo">Turbo</option>
+            <option value="armor">Armor</option>
+        </select>
+
+        <button id="applyCustomizationBtn">Apply Customization</button>
+    </div>
+    <div id="carPreview" class="preview"></div>
+    <script src="app.js"></script>
+</body>
+</html>
+""",
+    "styles.css": """
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.customization {
+    margin: 20px auto;
+    width: 300px;
+}
+
+.preview {
+    margin: 20px auto;
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border: 2px solid #333;
+}
+""",
+    "app.js": """
+function applyCustomization() {
+    const carModel = document.getElementById('carModel').value;
+    const carColor = document.getElementById('carColor').value;
+    const carUpgrade = document.getElementById('carUpgrade').value;
+    alert(`Customization Applied:\\nModel: ${carModel}\\nColor: ${carColor}\\nUpgrade: ${carUpgrade}`);
+    document.getElementById('carPreview').style.backgroundColor = carColor;
+}
+
+function initializeGame() {
+    console.log("Initializing Hcoinx Drive...");
+    document.getElementById('carPreview').style.backgroundColor = document.getElementById('carColor').value;
+}
+
+window.onload = function () {
+    initializeGame();
+    document.getElementById('applyCustomizationBtn').addEventListener('click', applyCustomization);
+};
+"""
+}
+
+# Create a zip file for the game
+zip_path = "/mnt/data/Hcoinx_Drive_Game.zip"
+with zipfile.ZipFile(zip_path, 'w') as zipf:
+    for filename, content in game_files.items():
+        with open(filename, 'w') as f:
+            f.write(content)
+        zipf.write(filename)
+        os.remove(filename)
+
+zip_path
